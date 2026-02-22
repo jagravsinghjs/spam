@@ -1,4 +1,4 @@
-# 🎭 Scamouflage  
+#  Scamouflage  
 ### An Adversarial Guardrail Game for Understanding Spam Detection
 
 ---

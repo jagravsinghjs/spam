@@ -1,96 +1,79 @@
-#  Scamouflage  
-### An Adversarial Guardrail Game for Understanding Spam Detection
+# 🎭 Scamouflage  
+A simple game to understand how scam detection models can be fooled
 
 ---
 
-## Overview
+## What is this?
 
-Scamouflage is an interactive adversarial learning experiment built around a spam detection model. The project explores how lexical machine learning classifiers behave under intentional manipulation.
+Scamouflage is a small ML project where I built a **scam vs safe message classifier** and then turned it into a **game**.
 
-A TF-IDF + Logistic Regression classifier is trained on the **SMSSpamCollection** dataset to predict whether a message is spam or legitimate. A game layer allows the user to iteratively modify a suspicious message and observe how the model’s predicted probability changes, attempting to bypass detection within limited attempts.
-
-The objective is not just classification accuracy, but understanding guardrail vulnerability.
-
----
-
-## Model Architecture
-
-- **Text Representation:** TF-IDF (unigrams + bigrams)  
-- **Classifier:** Logistic Regression  
-- **Class Balancing:** Enabled  
-- **Train/Test Split:** 80/20 (Stratified)
-
-The classifier computes:
-
-P(spam | x) = sigmoid(wᵀφ(x) + b)
-
-Where:
-- φ(x) = TF-IDF feature vector  
-- w = learned weights  
-- sigmoid = logistic function  
+Instead of just predicting labels, the idea is:
+> Can you rewrite a scam message so the model thinks it’s safe?
 
 ---
 
-## Evaluation Metrics
+## How it works
 
-The model is evaluated using:
+- Text → TF-IDF features (unigrams + bigrams)  
+- Model → Logistic Regression  
+- Output → Probability of being a scam  
 
-- Accuracy  
-- Precision  
-- Recall  
-- F1 Score  
-- ROC-AUC  
-- Confusion Matrix  
-
-Despite strong aggregate performance, adversarial experiments reveal structural weaknesses.
+\[
+P(\text{scam}) = \sigma(w^T \phi(x) + b)
+\]
 
 ---
 
-## Adversarial Experiments
+## The Game
 
-The notebook includes explicit adversarial manipulation techniques:
+- Enter a message  
+- See scam probability  
+- Modify it to bypass detection  
+- You get 3 attempts  
 
-- Removal of high-weight spam tokens  
-- Injection of benign tokens  
-- Keyword obfuscation (e.g., "fr33", "cl@im")  
-- Probability shift analysis  
+### Difficulty levels
 
-These manipulations frequently reduce spam probability below the classification threshold, demonstrating that linear lexical models rely heavily on surface-level token presence.
+- Easy → threshold = 0.7  
+- Medium → 0.5  
+- Hard → 0.3  
+
+Lower threshold = stricter model
 
 ---
 
-## Key Insight
+## What I found
 
-High accuracy does not imply robustness.
+Even with good accuracy, the model is easy to trick.
 
-Traditional spam datasets contain strong lexical signals, making them easy to classify but also easy to exploit. Small token-level changes can significantly alter predictions, revealing limitations of surface-feature-based guardrails.
+Some simple tricks that work:
+- Adding “safe” words like *team, meeting, payroll*  
+- Removing obvious scam keywords  
+- Slight obfuscation (*ver1fy, acc0unt*)  
+- Using completely new words (model gets confused)
+
+In many cases, the model just outputs ~0.5 because it doesn't recognize the input.
 
 ---
 
 ## Limitations
 
-- Dataset is spam/ham, not intent-based scam detection  
-- Linear model lacks semantic understanding  
-- No adversarial training applied  
+- Dataset is synthetic  
+- Model is purely word-based (no real understanding)  
+- Easy to bypass with small changes  
 
 ---
 
 ## Future Improvements
 
-- Construct a more realistic intent-based scam dataset  
-- Compare linear models with more expressive architectures  
-- Add dual game modes (attacker vs legitimate sender)  
-- Improve UI/UX with scoring and randomized feedback  
+- Better dataset (more realistic messages)  
+- Add character-level features  
+- Compare with stronger models  
+- Add more game modes + scoring system  
 
 ---
 
-## Purpose
 
-Scamouflage reframes spam detection as an adversarial interaction problem. Instead of treating classifiers as black boxes, it exposes how decisions are made and how they can fail.
+## Why I built this
 
-The project demonstrates model interpretability, adversarial reasoning, and guardrail analysis through an interactive experiment.
-Add dual game modes (attacker vs legitimate sender)
-Improve UI/UX with scoring and randomized feedback
-Purpose
-Scamouflage reframes spam detection as an adversarial interaction problem. Instead of treating classifiers as black boxes, it exposes how decisions are made and how they can fail.
-The project demonstrates model interpretability, adversarial reasoning, and guardrail analysis through an interactive experiment.
+Most projects stop at accuracy.  
+I wanted to understand **how models fail** — and make that visible in a fun way.

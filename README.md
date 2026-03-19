@@ -29,7 +29,7 @@ P(\text{scam}) = \sigma(w^T \phi(x) + b)
 - Enter a message  
 - See scam probability  
 - Modify it to bypass detection  
-- You get 3 attempts  
+- You get only 1 attempts  
 
 ### Difficulty levels
 

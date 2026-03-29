@@ -6,8 +6,7 @@ with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
 with open('vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
-with open('words.pkl', 'rb') as f:
-    top_scam_words, top_ham_words = pickle.load(f)
+
 
 def predict(message):
     vec = vectorizer.transform([message])
